@@ -7,6 +7,7 @@
 
 enum custom_keycodes {
     DRAG_SCROLL = SAFE_RANGE,
+    KC_GESTURE,
 };
 
 // トラックボール関連の関数宣言
@@ -18,3 +19,8 @@ extern bool set_scrolling;
 extern bool drag_scroll_pressed;
 extern float scroll_accumulated_h;
 extern float scroll_accumulated_v;
+
+// ジェスチャー機能用の変数
+extern bool gesture_mode;
+extern float gesture_accumulated_x;
+extern bool gesture_triggered;

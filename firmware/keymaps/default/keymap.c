@@ -59,7 +59,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //|------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+
         KC_LSFT,     KC_NO,       KC_EXLM,     KC_AT,       KC_HASH,     KC_NO,       KC_MINUS,    KC_1,        KC_2,        KC_3,        KC_NO,       KC_ENT,
     //|------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+
-        KC_NO,       KC_NO,       KC_NO,       KC_NO,       LT(2, KC_LNG2),       KC_NO,       KC_SPC,      LT(1, KC_LNG1),       KC_NO,       KC_NO,       KC_0,        KC_DOT
+        KC_NO,       KC_NO,       KC_NO,       KC_NO,       LT(2, KC_LNG2),       KC_GESTURE,       KC_SPC,      LT(1, KC_LNG1),       KC_NO,       KC_NO,       KC_0,        KC_DOT
     //|------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+
     ),
 
@@ -169,5 +169,21 @@ void matrix_scan_user(void) {
 
 // キー入力処理
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    // KC_GESTUREキーのハンドリング
+    if (keycode == KC_GESTURE) {
+        if (record->event.pressed) {
+            // キーが押された：ジェスチャーモード開始
+            gesture_mode = true;
+            gesture_accumulated_x = 0.0f;
+            gesture_triggered = false;
+        } else {
+            // キーが離された：ジェスチャーモード終了
+            gesture_mode = false;
+            gesture_accumulated_x = 0.0f;
+            gesture_triggered = false;
+        }
+        return false;  // このキーコードの処理を終了
+    }
+
     return process_record_trackball(keycode, record);
 }

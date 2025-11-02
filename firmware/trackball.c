@@ -22,6 +22,13 @@ bool drag_scroll_pressed = false;
 float scroll_accumulated_h = 0;
 float scroll_accumulated_v = 0;
 
+// ジェスチャー機能用の変数
+bool gesture_mode = false;
+float gesture_accumulated_x = 0.0f;
+bool gesture_triggered = false;
+
+#define GESTURE_THRESHOLD 50.0f  // ジェスチャー検出の閾値
+
 // マウス移動の累積とスムージング用変数
 static float x_accumulator = 0.0;
 static float y_accumulator = 0.0;
@@ -40,6 +47,25 @@ void pointing_device_init_user(void) {
 
 // マウスレポートを処理し、ドラッグスクロールを実行する関数
 report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+    // ジェスチャーモード中にマウス移動を検出（回転変換前の生の値を使用）
+    if (gesture_mode && !gesture_triggered) {
+        // マウスのX移動量を累積
+        gesture_accumulated_x += mouse_report.x;
+
+        // 左方向のジェスチャー検出
+        if (gesture_accumulated_x < -GESTURE_THRESHOLD) {
+            tap_code16(LCTL(KC_LEFT));  // Ctrl+左矢印を送信
+            gesture_triggered = true;
+            gesture_accumulated_x = 0.0f;
+        }
+        // 右方向のジェスチャー検出
+        else if (gesture_accumulated_x > GESTURE_THRESHOLD) {
+            tap_code16(LCTL(KC_RIGHT));  // Ctrl+右矢印を送信
+            gesture_triggered = true;
+            gesture_accumulated_x = 0.0f;
+        }
+    }
+
     // 45度回転変換 + 上下左右反転 (M_PI/180 ≈ 0.017453)
     double rad = (double)ROTATION_ANGLE_45_DEG * (M_PI / 180);
     float rotated_x = -(mouse_report.x * cos(rad) - mouse_report.y * sin(rad));
