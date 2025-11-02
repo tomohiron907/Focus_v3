@@ -23,4 +23,3 @@ extern float scroll_accumulated_v;
 // ジェスチャー機能用の変数
 extern bool gesture_mode;
 extern float gesture_accumulated_x;
-extern bool gesture_triggered;

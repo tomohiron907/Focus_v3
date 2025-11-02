@@ -55,7 +55,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     //,---------------------------------------------------------------------------------------------------------------------
         KC_TAB,      KC_NO,       KC_AMPR,     KC_ASTR,     KC_NO,       KC_NO,       KC_NO,       KC_7,        KC_8,        KC_9,        KC_NO,       KC_BSPC,
     //|------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+
-        KC_ESC,      KC_NO,       KC_DLR,      KC_PERC,     KC_CIRC,     KC_NO,       KC_MS_L,     KC_4,        KC_5,        KC_6,        KC_NO,       KC_ENT,
+        KC_ESC,      KC_NO,       KC_DLR,      KC_PERC,     KC_CIRC,     KC_GESTURE,       KC_MS_L,     KC_4,        KC_5,        KC_6,        KC_NO,       KC_ENT,
     //|------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+
         KC_LSFT,     KC_NO,       KC_EXLM,     KC_AT,       KC_HASH,     KC_NO,       KC_MINUS,    KC_1,        KC_2,        KC_3,        KC_NO,       KC_ENT,
     //|------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+------------+
@@ -175,12 +175,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             // キーが押された：ジェスチャーモード開始
             gesture_mode = true;
             gesture_accumulated_x = 0.0f;
-            gesture_triggered = false;
         } else {
             // キーが離された：ジェスチャーモード終了
             gesture_mode = false;
             gesture_accumulated_x = 0.0f;
-            gesture_triggered = false;
         }
         return false;  // このキーコードの処理を終了
     }
